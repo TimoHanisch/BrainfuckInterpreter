@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
  *
  * @author Timo Hanisch (timohanisch@gmail.com)
  */
-public class Interpreter {
+public class BrainfuckInterpreter {
 
     public static final char INC_POINTER = '>';
     public static final char DEC_POINTER = '<';
@@ -30,13 +30,25 @@ public class Interpreter {
 
     private final DataInputStream in;
 
-    public Interpreter() {
+    private boolean debug = false;
+
+    public BrainfuckInterpreter() {
         this(DEFAULT_CELL_COUNT);
     }
 
-    public Interpreter(int cellCount) {
-        cells = new char[cellCount];
-        in = new DataInputStream(System.in);
+    public BrainfuckInterpreter(boolean debug) {
+        this(DEFAULT_CELL_COUNT, debug);
+    }
+
+    public BrainfuckInterpreter(int cellCount) {
+        this.cells = new char[cellCount];
+        this.in = new DataInputStream(System.in);
+    }
+
+    public BrainfuckInterpreter(int cellCount, boolean debug) {
+        this.cells = new char[cellCount];
+        this.in = new DataInputStream(System.in);
+        this.debug = debug;
     }
 
     public void interpret(String input) {
@@ -45,9 +57,13 @@ public class Interpreter {
     }
 
     private void prepareInterpret(String input) {
-        System.out.println("Converting input");
+        if (debug) {
+            System.out.println("Converting input");
+        }
         inputToCharArray(input);
-        System.out.println("Interpreting input");
+        if (debug) {
+            System.out.println("Interpreting input");
+        }
     }
 
     private void doInterpretation() {
@@ -97,7 +113,7 @@ public class Interpreter {
                 break;
             case READ_INPUT:
                 try {
-                    char inputChar = (char)in.readByte();
+                    char inputChar = (char) in.readByte();
                     cells[currentCell] = inputChar;
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);

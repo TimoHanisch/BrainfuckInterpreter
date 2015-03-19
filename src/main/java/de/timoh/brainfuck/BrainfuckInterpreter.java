@@ -57,19 +57,19 @@ public class BrainfuckInterpreter {
     }
 
     private void prepareInterpret(String input) {
-        if (debug) {
+        if (this.debug) {
             System.out.println("Converting input");
         }
         inputToCharArray(input);
-        if (debug) {
+        if (this.debug) {
             System.out.println("Interpreting input");
         }
     }
 
     private void doInterpretation() {
-        while (currentInterpretingCharacter < input.length) {
-            interpretChar(input[currentInterpretingCharacter]);
-            currentInterpretingCharacter++;
+        while (this.currentInterpretingCharacter < this.input.length) {
+            interpretChar(this.input[this.currentInterpretingCharacter]);
+            ++this.currentInterpretingCharacter;
         }
     }
 
@@ -94,77 +94,85 @@ public class BrainfuckInterpreter {
     private void interpretChar(char c) {
         switch (c) {
             case INC_POINTER:
-                currentCell++;
+                if (this.currentCell + 1 < this.cells.length) {
+                    ++this.currentCell;
+                } else {
+                    throw new RuntimeException("Segmentation fault");
+                }
                 break;
             case DEC_POINTER:
-                currentCell--;
-                if (currentCell < 0) {
-                    currentCell = cells.length - 1;
+                if (this.currentCell - 1 >= 0) {
+                    --this.currentCell;
+                } else {
+                    throw new RuntimeException("Segmentation fault");
                 }
                 break;
             case INC_CELL:
-                cells[currentCell]++;
+                ++this.cells[this.currentCell];
                 break;
             case DEC_CELL:
-                cells[currentCell]--;
+                --this.cells[this.currentCell];
                 break;
             case PRINT_CELL:
-                System.out.print(cells[currentCell]);
+                System.out.print(this.cells[this.currentCell]);
                 break;
             case READ_INPUT:
                 try {
-                    char inputChar = (char) in.readByte();
-                    cells[currentCell] = inputChar;
+                    char inputChar = (char) this.in.readByte();
+                    this.cells[this.currentCell] = inputChar;
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
                 break;
             case LOOP_OPEN:
-                if (cells[currentCell] == 0) {
+                if (this.cells[this.currentCell] == 0) {
                     findMatchingCloseLoop();
                 }
                 break;
             case LOOP_CLOSE:
-                if (cells[currentCell] != 0) {
+                if (this.cells[this.currentCell] != 0) {
                     findMatchingOpenLoop();
                 }
                 break;
             default:
-            // Ignore Input
+            // By default, all non language characters are used as comment strings.
         }
     }
 
     private void findMatchingCloseLoop() {
-        currentInterpretingCharacter++;
+        ++this.currentInterpretingCharacter;
         int loopDepth = 0;
         while (true) {
-            switch (input[currentInterpretingCharacter]) {
+            switch (this.input[this.currentInterpretingCharacter]) {
                 case LOOP_OPEN:
-                    loopDepth++;
+                    ++loopDepth;
                     break;
                 case LOOP_CLOSE:
                     if (loopDepth <= 0) {
                         return;
                     }
-                    loopDepth--;
+                    --loopDepth;
                     break;
                 default:
                     break;
             }
-            currentInterpretingCharacter++;
+            ++this.currentInterpretingCharacter;
+            if (this.currentInterpretingCharacter >= this.input.length) {
+                throw new RuntimeException("Loop error");
+            }
         }
     }
 
     private void findMatchingOpenLoop() {
-        currentInterpretingCharacter--;
+        --this.currentInterpretingCharacter;
         int loopDepth = 0;
         while (true) {
-            switch (input[currentInterpretingCharacter]) {
+            switch (this.input[this.currentInterpretingCharacter]) {
                 case LOOP_OPEN:
                     if (loopDepth == 0) {
                         return;
                     }
-                    loopDepth--;
+                    --loopDepth;
                     break;
                 case LOOP_CLOSE:
                     loopDepth++;
@@ -172,7 +180,10 @@ public class BrainfuckInterpreter {
                 default:
                     break;
             }
-            currentInterpretingCharacter--;
+            --this.currentInterpretingCharacter;
+            if (this.currentInterpretingCharacter < 0) {
+                throw new RuntimeException("Loop error");
+            }
         }
     }
 }

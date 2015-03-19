@@ -36,3 +36,7 @@ I've included some code examples which can be run with the interpreter. Those ex
 * http://esolangs.org/wiki/Brainfuck
 * http://esoteric.sange.fi/brainfuck/utils/mandelbrot/ (Created by Erik Bosman)
 * http://www.hevanet.com/cristofd/brainfuck/ (Created by Daniel B. Cristofani)
+
+## License
+
+The MIT License (MIT), for more information see LISENCE.txt

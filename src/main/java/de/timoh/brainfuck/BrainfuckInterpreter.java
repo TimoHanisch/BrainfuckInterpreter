@@ -2,13 +2,14 @@ package de.timoh.brainfuck;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 /**
  *
- * @author Timo Hanisch (timohanisch@gmail.com)
+ * @author  <a href="mailto:timohanisch@gmail.com">Timo Hanisch</a>
  */
 public class BrainfuckInterpreter {
 
@@ -30,7 +31,11 @@ public class BrainfuckInterpreter {
 
     private final DataInputStream in;
 
+    private final PrintStream out;
+
     private boolean debug = false;
+
+    private StringBuilder outputBuilder;
 
     public BrainfuckInterpreter() {
         this(DEFAULT_CELL_COUNT);
@@ -43,27 +48,49 @@ public class BrainfuckInterpreter {
     public BrainfuckInterpreter(int cellCount) {
         this.cells = new char[cellCount];
         this.in = new DataInputStream(System.in);
+        this.out = System.out;
     }
 
     public BrainfuckInterpreter(int cellCount, boolean debug) {
         this.cells = new char[cellCount];
         this.in = new DataInputStream(System.in);
         this.debug = debug;
+        this.out = System.out;
     }
 
     public void interpret(String input) {
-        prepareInterpret(input);
+        if (this.debug) {
+            out.println("Converting input");
+        }
+        prepareInterpreter(input);
+        if (this.debug) {
+            out.println("Interpreting input");
+        }
         doInterpretation();
     }
 
-    private void prepareInterpret(String input) {
-        if (this.debug) {
-            System.out.println("Converting input");
+    /**
+     * Returns the output string from the last interpretation run.
+     *
+     * @return
+     */
+    public String getOutput() {
+        if (outputBuilder != null) {
+            return outputBuilder.toString().trim();
         }
+        return "";
+    }
+
+    private void prepareInterpreter(String input) {
+        cleanup();
         inputToCharArray(input);
-        if (this.debug) {
-            System.out.println("Interpreting input");
-        }
+    }
+
+    private void cleanup() {
+        this.cells = new char[this.cells.length];
+        this.currentCell = 0;
+        this.currentInterpretingCharacter = 0;
+        this.outputBuilder = new StringBuilder();
     }
 
     private void doInterpretation() {
@@ -114,7 +141,8 @@ public class BrainfuckInterpreter {
                 --this.cells[this.currentCell];
                 break;
             case PRINT_CELL:
-                System.out.print(this.cells[this.currentCell]);
+                out.print(this.cells[this.currentCell]);
+                outputBuilder.append(this.cells[this.currentCell]);
                 break;
             case READ_INPUT:
                 try {

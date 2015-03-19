@@ -1,7 +1,14 @@
 # BrainfuckInterpreter
 
 The BrainfuckInterpreter is a simple interpreter implementation of the Brainfuck (http://en.wikipedia.org/wiki/Brainfuck) programming language.
- 
+
+## Setup
+Maven is used to build this lib (Tested with 3.1.1).
+```
+# Use maven install to install the library to your local repository
+mvn install
+```
+
 To create an instance, all you need to do is:
 
 ```Java
@@ -16,6 +23,16 @@ BrainfuckInterpreter interpreter = new BrainfuckInterpreter(128);
 interpreter.interpret("some brainfuck code");
 ```
 
-The default size is set to **1024**.
+The default size chosen for the cell array in this interpreter is **1024**.
 
-Maven is used to build this lib (Tested with 3.1.1).
+## Tests
+There are currently four test cases.
+* Hello World - Simple, which runs a simple implementation of "Hello World!"
+* Hello World - Complex, running a more complex "Hello World!" program, crashing some interpreters according to http://esolangs.org/wiki/Brainfuck
+* Segmentation Fault, testing if runtime exceptions are thrown if the cell pointer leaves the range of the cell array
+
+## Credits
+I've included some code examples which can be run with the interpreter. Those example were found at:
+* http://esolangs.org/wiki/Brainfuck
+* http://esoteric.sange.fi/brainfuck/utils/mandelbrot/ (Created by Erik Bosman)
+* http://www.hevanet.com/cristofd/brainfuck/ (Created by Daniel B. Cristofani)

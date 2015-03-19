@@ -1,4 +1,4 @@
-# BrainfuckInterpreter v0.0.1
+# BrainfuckInterpreter v1.0.0
 
 The BrainfuckInterpreter is a simple interpreter implementation of the Brainfuck (http://en.wikipedia.org/wiki/Brainfuck) programming language.
 

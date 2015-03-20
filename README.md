@@ -1,7 +1,5 @@
 # BrainfuckInterpreter v1.0.1
 
-**This branch is used for the snapshot version** 
-
 The BrainfuckInterpreter is a simple interpreter implementation of the Brainfuck (http://en.wikipedia.org/wiki/Brainfuck) programming language.
 
 ## Setup

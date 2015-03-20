@@ -1,4 +1,4 @@
-# BrainfuckInterpreter v1.0.1-Snapshot
+# BrainfuckInterpreter v1.0.1
 
 **This branch is used for the snapshot version** 
 

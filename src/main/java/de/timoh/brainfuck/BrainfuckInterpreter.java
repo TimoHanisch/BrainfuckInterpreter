@@ -153,6 +153,25 @@ public class BrainfuckInterpreter {
     }
 
     /**
+     * Sets the size of the cell array. The size will change on the next
+     * interpretation run.
+     *
+     * @param size - Cell array size
+     */
+    public void setCellArraySize(int size) {
+        this.cellsCount = size;
+    }
+
+    /**
+     * Returns the count of cells used by the interpreter.
+     *
+     * @return
+     */
+    public int getCellArraySize() {
+        return this.cellsCount;
+    }
+
+    /**
      * Prepares the interpreter for a new input string.
      *
      * @param input - The Brainfuck program code
@@ -166,7 +185,7 @@ public class BrainfuckInterpreter {
      * Creates a new cells array and resets all pointers.
      */
     private void cleanup() {
-        this.cells = new char[this.cells.length];
+        this.cells = new char[this.cellsCount];
         this.currentCell = 0;
         this.currentInterpretingCharacter = 0;
         this.outputBuilder = new StringBuilder();
